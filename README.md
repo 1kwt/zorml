@@ -47,5 +47,18 @@ ZORML is a stack-based programming language where each command is a single chara
 ## Examples
 
 ### Print "hello world"
-```zorml
+```
 [hello world]^;
+```
+### Add 2 numbers together
+```
+>3>5+^; // Output: 8
+```
+### If-else
+```
+>5>5?0=1[>A^];>B^; // Output: A (doesn't print B because it stops at `;`)
+```
+### Define and Execute a Function
+```
+{>Hello^}~; // Output: Hello
+```
