@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -126,11 +128,21 @@ func innerexec(s string) {
 }
 
 func main() {
-	var see = ""
-	see = ">1>2?0=1[>3^];" // Example testing
-	for see != "quit" {
-		log.Print(".- zorml 2.1 >")
+	var see string
+	scanner := bufio.NewScanner(os.Stdin) // Create a scanner to read user input
+	log.Println(".- Welcome to ZORML 2.2 - Type 'quit' to exit")
+	for {
+		log.Print(".- zorml 2.2 > ")
+		if !scanner.Scan() { // Read the user's input
+			break
+		}
+		see = scanner.Text()
+		// Exit if the user types "quit"
+		if see == "quit" {
+			log.Println("Exiting ZORML. Goodbye!")
+			break
+		}
+		// Execute the user's ZORML code
 		innerexec(see)
-		see = "quit"
 	}
 }
