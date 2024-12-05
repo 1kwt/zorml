@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func performOperation(stack *[]string, operation func(a, b int) int) {
+func performOperation(stack *[]string, operation func(a, b int) int) { // Do required operation (+-/*)
 	if len(*stack) < 2 {
 		log.Println("Error: Not enough elements in the stack for operation")
 		return
@@ -25,25 +25,24 @@ func performOperation(stack *[]string, operation func(a, b int) int) {
 }
 
 func innerexec(s string) {
-	var stack []string // Use a slice for stack management
+	var stack []string // Stack
 	var fn string      // Function storage
 	var i int          // Current index in the input string
 
 	for i < len(s) {
-		// Stop execution if ";" is encountered
 		if s[i] == ';' {
 			break
-		}
+		} // Stop execution if ";" is encountered
 
 		switch s[i] {
-		case '>':
+		case '>': // Add next character to stack
 			i++
 			if i < len(s) {
 				stack = append(stack, string(s[i]))
 			}
-		case '^':
+		case '^': // Print stack
 			log.Println(strings.Join(stack, ""))
-		case '!':
+		case '!': // Print element from stack with the index of the following number
 			if i+1 < len(s) {
 				index, err := strconv.Atoi(string(s[i+1]))
 				if err == nil && index < len(stack) {
@@ -53,16 +52,16 @@ func innerexec(s string) {
 				}
 				i++
 			}
-		case '<':
+		case '<': // Request and add user input to stack
 			var input string
 			log.Println(".- input: ")
 			fmt.Scanln(&input)
 			stack = append(stack, input)
-		case '+':
+		case '+': // Add first two elements in the stack
 			performOperation(&stack, func(a, b int) int { return a + b })
-		case '-':
+		case '-': // Subtract first two elements in the stack
 			performOperation(&stack, func(a, b int) int { return a - b })
-		case '/':
+		case '/': // Divide first two elements in the stack
 			performOperation(&stack, func(a, b int) int {
 				if b == 0 {
 					log.Println("Error: Division by zero")
@@ -70,13 +69,13 @@ func innerexec(s string) {
 				}
 				return a / b
 			})
-		case '*':
+		case '*': // Multiply first two elements in the stack
 			performOperation(&stack, func(a, b int) int { return a * b })
-		case '#':
-			stack = nil // Clear the stack
-		case '~':
-			innerexec(fn) // Execute stored function
-		case '[':
+		case '#': // Clear stack
+			stack = nil
+		case '~': // Run stored function
+			innerexec(fn)
+		case '[': // Read text until a ']' and append it to the stack as a single element
 			var m strings.Builder
 			i++
 			for i < len(s) && s[i] != ']' {
@@ -84,7 +83,7 @@ func innerexec(s string) {
 				i++
 			}
 			stack = append(stack, m.String())
-		case '{':
+		case '{': // Read new function until a '}' and write it to fn
 			i++
 			var m strings.Builder
 			for i < len(s) && s[i] != '}' {
@@ -92,10 +91,10 @@ func innerexec(s string) {
 				i++
 			}
 			fn = m.String()
-		case '?': // Add "if" logic
+		case '?': // 'If' logic
 			i++
 			condition := strings.Builder{}
-			// Parse condition until '['
+			// Parse condition until it sees the function bracket '{'
 			for i < len(s) && s[i] != '[' {
 				condition.WriteByte(s[i])
 				i++
@@ -109,10 +108,10 @@ func innerexec(s string) {
 
 				if err1 == nil && err2 == nil && index1 < len(stack) && index2 < len(stack) {
 					if stack[index1] == stack[index2] {
-						// Execute commands inside `[]` if condition is true
+						// Execute commands inside `{}` if condition is true
 						var commands strings.Builder
 						i++
-						for i < len(s) && s[i] != ']' {
+						for i < len(s) && s[i] != '}' {
 							commands.WriteByte(s[i])
 							i++
 						}
@@ -130,19 +129,16 @@ func innerexec(s string) {
 func main() {
 	var see string
 	scanner := bufio.NewScanner(os.Stdin) // Create a scanner to read user input
-	log.Println(".- Welcome to ZORML 2.2 - Type 'quit' to exit")
+	log.Println(".- Type 'quit' to exit")
 	for {
-		log.Print(".- zorml 2.2 > ")
-		if !scanner.Scan() { // Read the user's input
+		log.Print(".- zorml 2.3 > ")
+		if !scanner.Scan() { // Read  user input
 			break
 		}
 		see = scanner.Text()
-		// Exit if the user types "quit"
 		if see == "quit" {
-			log.Println("Exiting ZORML. Goodbye!")
 			break
 		}
-		// Execute the user's ZORML code
 		innerexec(see)
 	}
 }
