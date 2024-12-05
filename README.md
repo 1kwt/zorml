@@ -9,15 +9,15 @@ ZORML is a stack-based programming language where each command is a single chara
 
 | Symbol  | Description                                                                                   | Example                      |
 |---------|-----------------------------------------------------------------------------------------------|------------------------------|
-| `>`     | Pushes the next character onto the stack.                                                     | `>A^` → Stack: `A` → Prints `A`. |
-| `<`     | Prompts the user for input and pushes the entered value onto the stack.                       | `<^` → Input: `5` → Prints `5`. |
+| `>`     | Pushes the next character onto the stack.                                                     | `>A^` → Stack: `A` → Prints `A`.      |
+| `<`     | Prompts the user for input and pushes the entered value onto the stack.                       | `<^` → Input: `5` → Prints `5`.      |
 | `^`     | Prints the entire stack as a single string.                                                   | `>A>B^` → Prints: `AB`.      |
 | `!`     | Prints the value at a specific stack index.                                                   | `>1>2!0` → Prints: `1`.      |
 | `#`     | Clears the entire stack.                                                                      | `>A#^` → Prints nothing.     |
 | `[ ]`   | Adds a string or long sequence of characters to the stack.                                    | `[hello]^` → Prints: `hello`.|
 | `{ }`   | Defines a function to be executed later.                                                      | `{>A^}` → No output yet.     |
 | `~`     | Executes the most recently defined function.                                                  | `{>A^}~` → Prints: `A`.      |
-| `;`     | Stops the interpreter from processing further commands.                                       | `>1>2;>3^` → Stops at `;`.   |
+| `;`     | Stops the interpreter from processing further commands.                                       | `>1>2;` → Stops at `;`.      |
 
 ---
 
@@ -36,8 +36,8 @@ ZORML is a stack-based programming language where each command is a single chara
 
 | Symbol  | Description                                                                                   | Example                      |
 |---------|-----------------------------------------------------------------------------------------------|------------------------------|
-| `?`     | Starts an **if condition** that checks if two stack indices are equal.                        | `>1>1?0=1[>A^]` → Prints: `A`. |
-| `[ ]`   | Encloses commands to be executed if the condition is true.                                    | `?0=1[>B^]` executes if true.|
+| `?`     | Starts an **if condition** that checks if two stack indices are equal.                        | `>1>1?0=1[>A^]` → Prints: `A`.      |
+| `{ }`   | Encloses commands to be executed if the condition is true.                                    | `?0=1{>B^}` executes if true.|
 
 **Condition Syntax**:
 - `?index1=index2[commands]`: Executes commands if values at `index1` and `index2` are equal.
@@ -56,9 +56,9 @@ ZORML is a stack-based programming language where each command is a single chara
 ```
 ### If-else
 ```
->5>5?0=1[>A^];>B^; // Output: A (doesn't print B because it stops at `;`)
+>5>5?0=1{>A^}; // Output: A because 5 = 5
 ```
 ### Define and Execute a Function
 ```
-{>Hello^}~; // Output: Hello
+{[Hello]^}~; // Output: Hello
 ```
