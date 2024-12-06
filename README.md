@@ -88,19 +88,19 @@ ZORML is a stack-based programming language where each command is a single chara
 ```
 // code indented and commented for clarity, what you would actually put into the interpreter is at the bottom
 <             // Get user input for the number of terms (e.g., 5)
->0>1          // Push initial Fibonacci numbers 0 and 1 onto the stack
->1            // Push the current term index (1)
+>0>1          // Push initial Fibonacci numbers: 0 and 1
+>1            // Push term index (1, representing the first term)
 {             // Define Fibonacci generator function
-  !2!0+       // Add the last two Fibonacci numbers (!2 and !0)
+  >!1!0+      // Add the last two Fibonacci numbers (!1 and !0)
   ^           // Print the result
-  >0          // Push the result back onto the stack
-  >2>1+>2#    // Increment the term index
-  !2!0?0=1{   // Check if the term index equals the user input
+  >!1         // Push the new Fibonacci number to the stack
+  !2>1+>2#    // Increment the term index and update the stack
+  !2!0?0=1[   // Check if the term index equals the user input
     ~         // If not, recursively call the function
-  };          // Stop if all terms are generated
+  ];          // Stop if all terms are generated
 }
 ~;            // Execute Fibonacci generator function
 ---------------------------------------------------------------
 // This is the grammatically correct way of putting this code into zorml:
->0>1>1{!2!0+^>0>2>1+>@#!!2!0?0=1{~}}~;
+<>0>1>1{>!1!0+^>!1!2>1+>2#!2!0?0=1{~};}~;
 ```
