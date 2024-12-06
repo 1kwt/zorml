@@ -95,7 +95,7 @@ func innerexec(s string) {
 			i++
 			condition := strings.Builder{}
 			// Parse condition until it sees the function bracket '{'
-			for i < len(s) && s[i] != '[' {
+			for i < len(s) && s[i] != '{' {
 				condition.WriteByte(s[i])
 				i++
 			}
