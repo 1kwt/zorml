@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 func performOperation(stack *[]string, operation func(a, b int) int) { // Do required operation (+-/*)
@@ -40,18 +41,26 @@ func innerexec(s string) {
 			if i < len(s) {
 				stack = append(stack, string(s[i]))
 			}
-		case '^': // Print stack
+		case '^': // Print whole stack
 			log.Println(strings.Join(stack, ""))
-		case '!': // Print element from stack with the index of the following number
-			if i+1 < len(s) {
-				index, err := strconv.Atoi(string(s[i+1]))
-				if err == nil && index < len(stack) {
-					log.Println(stack[index])
-				} else {
-					log.Println("Error: Invalid index for stack access")
-				}
+		case '!': // Print indexed element in the stack
+			i++
+			indexStr := "" // To capture multi-digit indices
+			for i < len(s) && unicode.IsDigit(rune(s[i])) {
+				indexStr += string(s[i])
 				i++
 			}
+			if indexStr != "" {
+				index, err := strconv.Atoi(indexStr)
+				if err == nil && index >= 0 && index < len(stack) {
+					log.Println(string(stack[index-1])) // Print the stack item at the given index
+				} else {
+					log.Println("Error: Invalid index") // Handle invalid indices
+				}
+			} else {
+				log.Println("Error: Missing index") // Handle missing index
+			}
+			i -= 1 // Adjust position since `for` loop increments `i`
 		case '<': // Request and add user input to stack
 			var input string
 			log.Println(".- input: ")
